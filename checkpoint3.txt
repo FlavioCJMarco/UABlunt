@@ -1,0 +1,663 @@
+import telebot
+from telebot import types
+import telepot
+import logging
+import time
+import os
+
+TOKEN = "802101135:AAEjTDm69YM33QF8fft46QYzOcvE59zSn-o" 
+
+userStep = {}
+knownUsers = []
+
+commands = {
+              'start': 'Arranca el bot',
+              'ayuda': 'Comandos disponibles',
+              'exec': 'Ejecuta un comando'
+}
+
+
+age={}
+gender={}
+uab={}
+weed={}
+regDone={}
+inReg={}
+
+gameON={}
+caladas={}
+asigRol={}
+facVet={}
+facTrad={}
+
+#######################################33
+    #DEFINICIÓN BOOLEANOS SITUACIONES
+sitShown={}
+sit1bool={}
+sit2bool={}
+sit3bool={}
+sit4bool={}
+sit5bool={}
+sit6bool={}
+sit7bool={}
+sit8bool={}
+sit9bool={}
+sit10bool={}
+sit11bool={}
+sit12bool={}
+sit13bool={}
+sit14bool={}
+sit15bool={}
+sit16bool={}
+sit17bool={}
+sit18bool={}
+sit19bool={}
+sit20bool={}
+
+boolAgresivo={}
+boolCauto={}
+    
+boolFumeta={}
+boolNeutro={}
+boolSano={}
+    
+boolPrueba={}
+boolNoPrueba={}
+
+list_objetos=["",", Mapa del Eix Central 🗺️",", Lazo amarillo 🎗"️,", Casco romano ⛑️",", Pokéball vacía ⚽"]
+objeto={}
+
+def set_reg_bools(cid):
+###################################
+    #BOOLEANOS DE REGISTRO:
+    age[cid]=False
+    gender[cid]=False
+    uab[cid]=False
+    weed[cid]=False
+    regDone[cid]=False
+    inReg[cid]=False
+    
+def set_game_bools(cid):    
+    #BOOLEANOS DE CONTROL DE JUEGO:
+    gameON[cid]=False
+    asigRol[cid]=False
+    facVet[cid]=False
+    facTrad[cid]=False
+    caladas[cid] = 0
+    objeto[cid]=0
+    #BOOLEANOS DE SITUACION
+    sitShown[cid]=False
+    sit1bool[cid]=False
+    sit2bool[cid]=False
+    sit3bool[cid]=False
+    sit4bool[cid]=False
+    sit5bool[cid]=False
+    sit6bool[cid]=False
+    sit7bool[cid]=False
+    sit8bool[cid]=False
+    sit9bool[cid]=False
+    sit10bool[cid]=False
+    sit11bool[cid]=False
+    sit12bool[cid]=False
+    sit13bool[cid]=False
+    sit14bool[cid]=False
+    sit15bool[cid]=False
+    sit16bool[cid]=False
+    sit17bool[cid]=False
+    sit18bool[cid]=False
+    sit19bool[cid]=False
+    sit20bool[cid]=False
+    #BOOLEANOS DE ROL
+    boolAgresivo[cid]=False
+    boolCauto[cid]=False
+    
+    boolFumeta[cid]=False
+    boolNeutro[cid]=False
+    boolSano[cid]=False
+    
+    boolPrueba[cid]=False
+    boolNoPrueba[cid]=False
+    
+###################################
+
+
+
+"""
+options_2=types.InlineKeyboardMarkup(2) #NECESITAREMOS TECLADOS DE ESTE ESTILO PARA LAS PREGUNTAS DEL JUEGO EN SÍ 
+ans_A=types.InlineKeyboardButton('A', callback_data='A')
+ans_B=types.InlineKeyboardButton('B', callback_data='B')
+options_2.row(ans_A, ans_B)
+
+options_3=types.InlineKeyboardMarkup(3) #NECESITAREMOS TECLADOS DE ESTE ESTILO PARA LAS PREGUNTAS DEL JUEGO EN SÍ 
+ans_A=types.InlineKeyboardButton('A', callback_data='A')
+ans_B=types.InlineKeyboardButton('B', callback_data='B')
+ans_C=types.InlineKeyboardButton('C', callback_data='C')
+options_3.row(ans_A, ans_B, ans_C)
+
+options_4=types.InlineKeyboardMarkup(4) #NECESITAREMOS TECLADOS DE ESTE ESTILO PARA LAS PREGUNTAS DEL JUEGO EN SÍ 
+ans_A=types.InlineKeyboardButton('A', callback_data='A')
+ans_B=types.InlineKeyboardButton('B', callback_data='B')
+ans_C=types.InlineKeyboardButton('C', callback_data='C')
+ans_D=types.InlineKeyboardButton('D', callback_data='D')
+options_4.row(ans_A, ans_B, ans_C, ans_D)
+"""
+
+menu = types.ReplyKeyboardMarkup()
+menu.add("Acceder al registro 🍃")
+menu.add("Seleccionar idioma 🌐")
+
+
+age_list=[] #Creamos esta lista para añadir todas las posibles respuestas y comprobar si el usuario ha introducido una correcta en el message handler del menú
+age_list=["Soy menor de 18 años. 🧒","Tengo entre 18 y 25 años.👦","Tengo entre 26 y 40 años. 🧑","Tengo entre 40 y 60 años. 🧓","Tengo 61 años o más. 👵","Prefiero no contestar. 🤷"]
+age_menu = types.ReplyKeyboardMarkup()
+age_menu.add("Soy menor de 18 años. 🧒")
+age_menu.add("Tengo entre 18 y 25 años.👦")
+age_menu.add("Tengo entre 26 y 40 años. 🧑")
+age_menu.add("Tengo entre 40 y 60 años. 🧓")
+age_menu.add("Tengo 61 años o más. 👵")
+age_menu.add("Prefiero no contestar. 🤷")
+
+gender_list=["♂","♀","Prefiero no contestar. 🤷️"]
+gender_menu = types.ReplyKeyboardMarkup()
+gender_menu.add(gender_list[0])
+gender_menu.add(gender_list[1])
+gender_menu.add(gender_list[2])
+
+uab_list=["Sí, estoy relacionado directamente con la Universitat Autònoma de Barcelona.","No, no tengo relación alguna."]
+uab_menu = types.ReplyKeyboardMarkup()
+uab_menu.add(uab_list[0])
+uab_menu.add(uab_list[1])
+
+weed_list=["Sí.","No.","Prefiero no contestar. 🤷"]
+weed_menu = types.ReplyKeyboardMarkup()
+weed_menu.add(weed_list[0])
+weed_menu.add(weed_list[1])
+weed_menu.add(weed_list[2])
+
+lang_list=["ESPAÑOL 🇪🇸", "CATALÀ 🏴󠁥󠁳󠁣󠁴󠁿", "ENGLISH 🇬🇧","Atrás"] #La bandera de Cataluña es así de larga en emoji, sí
+lang_menu=types.ReplyKeyboardMarkup()
+lang_menu.add(lang_list[0],lang_list[1],lang_list[2])
+lang_menu.add(lang_list[3])
+
+boton_rol_list=["¡ASÍGNAME UN ROL! 🧙"] #SOLO UN BOTÓN QUE NOS LLEVE A LA ASIGNACIÓN DE ROL
+boton_rol=types.ReplyKeyboardMarkup()
+boton_rol.add(boton_rol_list[0])
+
+mid_menu_list=["Iniciar Partida 🍂","Seleccionar idioma 🌐","Modificar registro 🍃"]
+mid_menu=types.ReplyKeyboardMarkup()
+mid_menu.add(mid_menu_list[0],mid_menu_list[1],mid_menu_list[2])
+
+game_menu_list=["Dar calada 🚬🍁","STATS 📖","Forzar fin de partida ❌"]
+game_menu=types.ReplyKeyboardMarkup()
+game_menu.add(game_menu_list[0],game_menu_list[1])
+game_menu.add(game_menu_list[2])
+
+heart=types.ReplyKeyboardMarkup() #DE ESTA FORMA MOSTRAMOS UN CORAZONCITO EN UN MENÚ GRANDE QUE NO REDIRIGE A NADA, PUEDE SER ÚTIL
+heart.add("❤")
+
+boton_vet_list=["VETERINARIA 🦓"] #SOLO UN BOTÓN QUE NOS LLEVE A LA FACULTAD DE VETERINARIA
+boton_vet=types.ReplyKeyboardMarkup()
+boton_vet.add(boton_vet_list[0])
+
+boton_trad_list=["TRADUCCIÓN ㊙️"] #SOLO UN BOTÓN QUE NOS LLEVE A LA FACULTAD DE TRADUCCIÓN
+boton_trad=types.ReplyKeyboardMarkup()
+boton_trad.add(boton_trad_list[0])
+
+
+# COLOR TEXTO EN LA CONSOLA DEL SERVIDOR
+class color:
+    RED = '\033[91m'
+    BLUE = '\033[94m'
+    GREEN = '\033[32m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+# USER STEP
+def get_user_step(uid):
+    if uid in userStep:
+        return userStep[uid]
+    else:
+        knownUsers.append(uid)
+        userStep[uid] = 0
+        print(color.RED + " [¡] ¡¡NUEVO USUARIO!!" + color.ENDC)
+
+
+# LISTENER
+def listener(messages):
+ 
+    for m in messages:
+        if m.content_type == 'text':
+            print("[" + str(m.chat.id) + "] " + str(m.chat.first_name) + ": " + m.text) #IMPRIMIMOS EL LOG POR PANTALLA
+            if inReg[m.chat.id]==True:
+                f = open( 'log'+str(m.chat.id)+'REG.txt', 'a') #Guardamos el registro en modo SOBREESCRIBIR
+                f.write("[" + str(m.chat.id) + "] " + str(m.chat.first_name) + ": " + m.text + "\n")
+                f.close()
+            else:
+                f = open( 'log'+str(m.chat.id)+'.txt', 'a') # Abrimos nuestro fichero log en modo 'Añadir'.
+                f.write("[" + str(m.chat.id) + "] " + str(m.chat.first_name) + ": " + m.text + "\n") # Escribimos la linea de log en el fichero.
+                f.close() # Cerramos el fichero para que se guarde.
+ 
+
+bot = telebot.TeleBot(TOKEN)
+bot.set_update_listener(listener)
+
+
+# START
+@bot.message_handler(commands=['start'])
+def command_start(m):
+    
+    global regDone,knownUsers
+        
+    cid = m.chat.id
+    userStep[cid] = 0
+    
+    get_user_step(m.chat.id)
+    
+    if m.chat.id not in knownUsers or regDone[cid]==False:
+        set_reg_bools(cid)
+        knownUsers.append(cid)
+    
+        bot.send_message(cid, "Eh, " + str(m.chat.first_name) + "...")
+        time.sleep(1)
+        bot.send_message(cid, "Así que estás interesada/o en UABlunt...")
+        time.sleep(1)
+        bot.send_message(cid, "Necesitamos que contestes unas cuantas preguntas personales para ayudarnos a mejorar.", reply_markup=menu)
+    else:
+        bot.send_message(cid, "¡Bienivenido de nuevo a UABlunt, "+str(m.chat.first_name)+"!", reply_markup=mid_menu)
+
+
+#ESTO NO LO USAMOS
+# AYUDA
+@bot.message_handler(commands=['ayuda'])
+def command_help(m):
+    cid = m.chat.id
+    help_text = "Grabar sesion: TermRecord -o /tmp/botlog.html\n"
+    help_text += "Comandos disponibles: \n"
+    for key in commands:
+        help_text += "/" + key + ": "
+        help_text += commands[key] + "\n"
+    bot.send_message(cid, help_text)
+
+
+# MENU PRINCIPAL
+@bot.message_handler(func=lambda message: get_user_step(message.chat.id) == 0)
+def main_menu(m):
+    
+    global asigRol,inReg,userStep
+    cid = m.chat.id
+    text = m.text
+    inReg[cid]=False
+    
+    if text == "Acceder al registro 🍃" and regDone[cid]==False:  # REGISTRO INICIAL
+        bot.send_message(cid, "Las respuestas a estas preguntas nos ayudan a conocer mejor a los jugadores de UABlunt. Muchas gracias por tu tiempo. :)")
+        time.sleep(1)
+        inReg[cid]=True
+        f = open( 'log'+str(m.chat.id)+'REG.txt', 'w')
+        f.write("##########REGISTRO##########\n\n")
+        f.close()
+        bot.send_message(cid, "¿Cuántos años tienes?", reply_markup=age_menu)   
+        userStep[cid] = 1
+    elif text == "Modificar registro 🍃" and regDone[cid]==True:  # REGISTRO INICIAL
+        bot.send_message(cid, "Muchas gracias por actualizar tu información. :)")
+        time.sleep(1)
+        set_reg_bools(cid)
+        inReg[cid]=True
+        bot.send_message(cid, "¿Cuántos años tienes?", reply_markup=age_menu)   
+        userStep[cid] = 1
+             
+    elif text == "Seleccionar idioma 🌐":  # IDIOMA
+        bot.send_message(cid, "Selección de idioma:", reply_markup=lang_menu)
+        userStep[cid] = 2
+    elif text == "Iniciar Partida 🍂":
+            set_game_bools(cid)
+            bot.send_message(cid, "¡Hora de aventuras!",reply_markup=boton_rol)
+            userStep[cid] = 3
+            asigRol[cid]=True
+    else:
+        command_text(m)
+
+
+# SECUENCIA DE REGISTRO
+@bot.message_handler(func=lambda message: get_user_step(message.chat.id) == 1)
+def registro(m):
+        global age,gender,uab,weed,reg, regDone, inReg, asigRol, userStep
+        cid = m.chat.id
+        txt = m.text
+        
+        if txt in age_list and age[cid]==False:  # TEMP
+            bot.send_message(cid, "¿Cuál es tu género?",reply_markup=gender_menu)
+            age[cid]=True
+        elif txt in gender_list and gender[cid]==False:
+            bot.send_message(cid, "¿Eres estudiante, profesor, PAS, PDI o Alumni de la Universitat Autònoma de Barcelona?",reply_markup=uab_menu)
+            gender[cid]=True
+        elif txt in uab_list and uab[cid]==False:
+            bot.send_message(cid, "¿Consumes habitualmente la droga: el porro?",reply_markup=weed_menu)
+            uab[cid]=True
+        elif txt in weed_list and weed[cid]==False:
+            #weed_menu.ReplyKeyboardRemove()
+            
+            if txt=='Sí.' or txt=='Prefiero no contestar. 🤷':
+                bot.send_message(cid, "El equipo de UABlunt no apoya el consumo de drogas. Si crees que puedes tener un problema, hay muchas personas dispuestas a ayudarte.\n\nVisita https://www.fad.es/",reply_markup=heart)
+            uab[cid]=True
+            regDone[cid]=True
+            
+            time.sleep(2)
+            bot.send_message(cid, "¡Gracias, "+str(m.chat.first_name)+", ya puedes empezar tu aventura!",reply_markup=boton_rol)
+            set_game_bools(cid)
+            inReg[cid]=False
+            asigRol[cid]=True
+            userStep[cid] = 3
+        else:
+            command_text(m)
+
+
+# MENU IDIOMA
+@bot.message_handler(func=lambda message: get_user_step(message.chat.id) == 2)
+def idioma(m):
+        cid = m.chat.id
+        text = m.text
+        if text != "Atrás" and text in lang_list:
+            bot.send_message(cid, "Esta sección está actualmente en desarrollo. ¡Vuelve pronto!",reply_markup=lang_menu)
+        elif text == "Atrás":  # ATRAS
+            userStep[cid] = 0
+            if regDone[cid]==False:
+                bot.send_message(cid, "Has vuelto al menú principal", reply_markup=menu)
+            else:
+                bot.send_message(cid, "Has vuelto al menú principal", reply_markup=mid_menu)
+        else:
+            command_text(m)
+            
+
+#SECUENCIA DE ASIGNACIÓN DE ROL
+@bot.message_handler(func=lambda message: get_user_step(message.chat.id) == 3)
+def asignarRol(m):
+        sit1=telebot.types.InlineKeyboardMarkup()
+        sit1.row(telebot.types.InlineKeyboardButton('A', callback_data='1A'),telebot.types.InlineKeyboardButton('B', callback_data='1B'))
+        sit2=telebot.types.InlineKeyboardMarkup()
+        sit2.row(telebot.types.InlineKeyboardButton('A', callback_data='2A'),telebot.types.InlineKeyboardButton('B', callback_data='2B'), telebot.types.InlineKeyboardButton('C', callback_data='2C'),telebot.types.InlineKeyboardButton('D', callback_data='2D'))
+        sit3=telebot.types.InlineKeyboardMarkup()
+        sit3.row(telebot.types.InlineKeyboardButton('A', callback_data='3A'),telebot.types.InlineKeyboardButton('B', callback_data='3B'))
+
+    
+        cid = m.chat.id
+        text = m.text
+        
+        global gameON,asigRol, boolAgresivo, boolCauto, boolFumeta, boolNeutro, boolSano, boolNoPrueba, boolPrueba, sit1bool, sit2bool, sit3bool
+
+        gameON[cid]=True
+        command_text(m)
+
+        if (sitShown[cid]==False and asigRol[cid]==True):
+            sitShown[cid]=True
+            bot.send_message(cid, "zzzzz...zzzz…!!!", reply_markup=game_menu)
+            time.sleep(1)
+            bot.send_message(cid, "Te despiertan las sirenas, te encuentras mareado pero consigues incorporarte.\n'¿Qué haces en la facultad de veterinaria a estas horas de la mañana? -Oyes un grito a lo lejos:")
+            time.sleep(2)
+            bot.send_message(cid, "'¡Eh, tú! ¡Levántate, ahí no se puede estar!'")
+            time.sleep(2)
+            bot.send_message(cid, '***Te levantas de inmediato, el guardia impone bastante, pero aún así le contestas: \n \n a) ¡A mí no me dé órdenes usted! (agresivo) \n b) De acuerdo, ya me voy, tranquilo... (cauto)', reply_markup=sit1)
+            while(sit1bool[cid] == False):
+                pass
+            time.sleep(2)
+            bot.send_message(cid, 'Notas algo en el bolsillo, llevas un porro encima, pero mantienes la calma hasta que te alejas del guardia.')
+            time.sleep(2)
+            bot.send_message(cid, '***¿Cómo ha llegado hasta ahí? ¿Sueles fumar? \n\n a)Sí, casi cada día, para aguantar la uni. (Fumeta)\nb) De vez en cuando, de fiesta con los amigos, que no hace daño. (Fumeta) \n c) He probado alguna vez, pero me da cosa. (Neutro) \n d) No. Eso está mal, los porros matan, por mucho que tenga uno en el bolsillo. (...¿Sano?)', reply_markup=sit2)
+            while(sit2bool[cid] == False):
+                pass
+            time.sleep(2)
+            bot.send_message(cid, '***¿Quieres probarlo? \n a) Claro, hay que probar la mercancía. \n b) Mejor no, que son las 10, hombre.', reply_markup=sit3)
+            while(sit3bool[cid] == False):
+                pass
+            asigRol[cid]=False #####FIN ASIGNACIÓN DE ROL
+            sitShown[cid]=False
+
+		
+            ##################################################################################################
+			
+            if boolAgresivo[cid]==True and boolFumeta[cid]==True and boolNoPrueba[cid]==True:	
+                bot.send_message(cid, "#RESULTADOS DE LA ASIGNACIÓN DE ROL#\n\nEres una persona dura, que no teme a un guardia de seguridad ni a una muerte por sobredosis, de hecho te encanta fumar. En un alarde de cordura pensaste que quizás no era el momento de fumar... pero al final la presión social pudo incluso contigo, ¿no?", reply_markup=boton_vet)
+            elif boolAgresivo[cid]==True and boolNeutro[cid]==True and boolNoPrueba[cid]==True:	
+                bot.send_message(cid, "#RESULTADOS DE LA ASIGNACIÓN DE ROL#\n\nEres una persona dura pero razonable, que no teme a un guardia de seguridad pero hasta cierto punto respeta el concepto de la drogadicción. En un alarde de cordura pensaste que quizás no era el momento de fumar... pero al final la presión social pudo incluso contigo, ¿no?", reply_markup=boton_vet)
+            elif boolAgresivo[cid]==True and boolSano[cid]==True and boolNoPrueba[cid]==True:	
+                bot.send_message(cid, "#RESULTADOS DE LA ASIGNACIÓN DE ROL#\n\nEres una persona dura pero consecuente con tus actos, que no teme a un guardia de seguridad pero sabe bien que las drogas no son ninguna broma. Demostrando tus valores, eliges no fumarte el porro que había en tu bolsillo, pero al final te das cuenta de que si estaba ahí era por algo, ¿verdad, 'sanote'?", reply_markup=boton_vet)
+            elif boolAgresivo[cid]==True and boolFumeta[cid]==True and boolPrueba[cid]==True:	
+                bot.send_message(cid, "#RESULTADOS DE LA ASIGNACIÓN DE ROL#\n\nEres una persona dura, que no teme a un guardia de seguridad ni a una muerte por sobredosis, de hecho te encanta fumar. Probablemente no haga falta decir que eres la clase de persona que si una mañana se despertase tirada en el césped y se encontrase un porro en el bolsillo se lo fumaría sin pensarlo dos veces (porque es lo que acaba de pasar)", reply_markup=boton_vet)
+            elif boolAgresivo[cid]==True and boolNeutro[cid]==True and boolPrueba[cid]==True:	
+                bot.send_message(cid, "#RESULTADOS DE LA ASIGNACIÓN DE ROL#\n\nEres una persona dura pero razonable, que no teme a un guardia de seguridad pero hasta cierto punto respeta el concepto de la drogadicción. Sin embargo, cuando te despertaste en la hierba esta mañana no te apetecía mucho respetar nada.", reply_markup=boton_vet)
+            elif boolAgresivo[cid]==True and boolSano[cid]==True and boolPrueba[cid]==True:	
+                bot.send_message(cid, '#RESULTADOS DE LA ASIGNACIÓN DE ROL#\n\nEres una persona dura pero consecuente con tus actos, que no teme a un guardia de seguridad pero sabe bien que las drogas no son ninguna broma. Demostrando tus "valors", eliges fumarte el porro que había en tu bolsillo.\n\n*Por supuesto, demuestras tu valor para elegir absurdamente la opción D en la segunda pregunta y la A en la tercera.', reply_markup=boton_vet)			
+
+            elif boolAgresivo[cid]==False and boolFumeta[cid]==True and boolNoPrueba[cid]==True:	
+                bot.send_message(cid, "#RESULTADOS DE LA ASIGNACIÓN DE ROL#\n\nEres una persona capaz de mantener las formas incluso en las soluciones límite, pero cuando fumas te conviertes en todo lo contrario, así que es una pena que te guste tanto fumar. En un alarde de cordura pensaste que quizás no era el momento de fumar... pero al final la presión social pudo incluso contigo, ¿no?", reply_markup=boton_vet)
+            elif boolCauto[cid]==True and boolNeutro[cid]==True and boolNoPrueba[cid]==True:	
+                bot.send_message(cid, "#RESULTADOS DE LA ASIGNACIÓN DE ROL#\n\nEres una persona razonable, que rara vez falta al respeto al tiempo que respeta el concepto de la drogadicción. En un alarde de cordura pensaste que quizás no era el momento de fumar... pero al final la presión social pudo incluso contigo, ¿no?", reply_markup=boton_vet)
+            elif boolCauto[cid]==True and boolSano[cid]==True and boolNoPrueba[cid]==True:	
+                bot.send_message(cid, "#RESULTADOS DE LA ASIGNACIÓN DE ROL#\n\nEres una persona cautelosa y casi perspicaz, que sabe comportarse y, sobre todo, sabe bien que las drogas no son ninguna broma. Demostrando tus valores, eliges no fumarte el porro que había en tu bolsillo, pero al final te das cuenta de que si estaba ahí era por algo, ¿verdad, 'sanote'?", reply_markup=boton_vet)
+            elif boolCauto[cid]==True and boolFumeta[cid]==True and boolPrueba[cid]==True:	
+                bot.send_message(cid, "#RESULTADOS DE LA ASIGNACIÓN DE ROL#\n\nEres una persona capaz de mantener las formas incluso en las soluciones límite, pero cuando fumas te conviertes en todo lo contrario, así que es una pena que te guste tanto fumar. Es llamativo que pese a saber cuándo mantener la boca cerrada no hayas sido capaz de hacerlo con un porro delante.", reply_markup=boton_vet)
+            elif boolCauto[cid]==True and boolNeutro[cid]==True and boolPrueba[cid]==True:	
+                bot.send_message(cid, "#RESULTADOS DE LA ASIGNACIÓN DE ROL#\n\nEres una persona razonable, que rara vez falta al respeto al tiempo que respeta el concepto de la drogadicción. Sin embargo, cuando te despertaste en la hierba esta mañana no te apetecía mucho respetar nada.", reply_markup=boton_vet)
+            elif boolCauto[cid]==True and boolSano[cid]==True and boolPrueba[cid]==True:	
+                bot.send_message(cid, '#RESULTADOS DE LA ASIGNACIÓN DE ROL#\n\nEres una persona cautelosa y casi perspicaz, que sabe comportarse y, sobre todo, sabe bien que las drogas no son ninguna broma. Demostrando tus "valors", eliges fumarte el porro que había en tu bolsillo.\n\n*Por supuesto, demuestras tu valor para elegir absurdamente la opción D en la segunda pregunta y la A en la tercera.', reply_markup=boton_vet)
+            
+            ##################################################################################################
+            
+            #bot.send_message(cid, "#FIN DE LA ASIGNACIÓN DE ROL#", reply_markup=boton_vet)
+            userStep[cid] = 4
+			
+            
+#SECUENCIA DE FACULTAD VETERINARIA
+@bot.message_handler(func=lambda message: get_user_step(message.chat.id) == 4)
+def facultadVeterinaria(m):
+    
+    sit4=telebot.types.InlineKeyboardMarkup()
+    sit4.row(telebot.types.InlineKeyboardButton('A', callback_data='4A'),telebot.types.InlineKeyboardButton('B', callback_data='4B'), telebot.types.InlineKeyboardButton('C', callback_data='4C'))
+
+    cid = m.chat.id
+    text = m.text
+        
+    global gameON,facVet, sit4bool
+    facVet[cid] = True
+    
+    gameON[cid] = True
+    command_text(m)
+    
+    if(sitShown[cid] == False):
+        sitShown[cid] = True
+        bot.send_message(cid, 'Le preguntas sobre las sirenas, qué está pasando.', reply_markup = game_menu)
+        time.sleep(2)
+        bot.send_message(cid, 'Te explica que ayer hubo un ataque informático a la red privada de la UAB, y que se han perdido todos los expedientes y notas.')
+        time.sleep(2)
+        bot.send_message(cid, 'Sorprendido, preguntas:\n a) ¿Se sabe quién ha sido? \n b) ¿Por eso hay tanta seguridad? \n c) ¿Unos munchies?', reply_markup = sit4)
+        while(sit4bool[cid] == False):
+            pass
+        time.sleep(2)
+        bot.send_message(cid, 'Con esta información, compruebas que efectivamente la página principal de la UAB está caída, y muestra un mensaje:')
+        time.sleep(2)
+        bot.send_message(cid, '科学は助ける')
+        time.sleep(2)
+        bot.send_message(cid, 'No lo entiendes, y no tienes conexión a internet, la zona UAB está completamente capada, pero se te ocurre quién podría traducirlo…')
+        time.sleep(2)
+        bot.send_message(cid, 'Te diriges a paso firme hacia la facultad de traducción...', reply_markup = boton_trad)
+        
+        userStep[cid] = 5
+        sitShown[cid] = False
+    
+
+#SECUENCIA DE FACULTAD TRADUCCIÓN
+@bot.message_handler(func=lambda message: get_user_step(message.chat.id) == 5)
+def facultadTraduccion(m):
+    
+    sit7=telebot.types.InlineKeyboardMarkup()
+    sit7.row(telebot.types.InlineKeyboardButton('A', callback_data='7A'),telebot.types.InlineKeyboardButton('B', callback_data='7B'), telebot.types.InlineKeyboardButton('C', callback_data='7C'),telebot.types.InlineKeyboardButton('D', callback_data='7D'))
+    sit3=telebot.types.InlineKeyboardMarkup()
+    sit3.row(telebot.types.InlineKeyboardButton('A', callback_data='3A'),telebot.types.InlineKeyboardButton('B', callback_data='3B'))
+    
+    cid = m.chat.id
+    text = m.text
+        
+    global gameON,facTrad, caladas, sit7bool
+    facTrad[cid] = True
+    
+    gameON[cid] = True
+    command_text(m)
+    
+    if(sitShown[cid] == False):
+        sitShown[cid] = True
+        bot.send_message(cid, 'Caminas siguiendo las vías de FGC…y llegas a traducción e interpretación.',reply_markup=game_menu)
+        time.sleep(2)
+        bot.send_message(cid, 'Todo el bioma cambia, y ahora parece como si hubieras viajado al pasado, al Japón feudal.')
+        time.sleep(2)
+        if(caladas[cid] >= 10):
+            bot.send_message(cid, '"Hola amigo, ¿como te puedo ayudar?, suelo tener la solución a todos los problemas en mi bolsillo mágico" \na) Le pides un mapa de la universidad \nb)Un lazo amarillo \nc)Un casco romano \nd)Una poké ball vacía', sit7)
+            while(sit7bool[cid] == False):
+                pass
+    
+# DESARROLLO DE LAS INLINE QUERYS DEL JUEGO (SITUACIONES MULTIRESPUESTA)
+@bot.callback_query_handler(func=lambda call: True)
+def iq_callback(query):
+   global gameON, caladas, sit1bool,sit2bool,sit3bool,sit4bool,sit5bool,sit6bool,sit7bool,sit8bool
+   print("###Callback Recibido")
+   
+   sit5=telebot.types.InlineKeyboardMarkup()
+   sit5.row(telebot.types.InlineKeyboardButton('A', callback_data='5A'))
+   sit6=telebot.types.InlineKeyboardMarkup()
+   sit6.row(telebot.types.InlineKeyboardButton('A', callback_data='6A'), telebot.types.InlineKeyboardButton('B', callback_data='6B'))
+   
+   cid=query.message.chat.id
+   data = query.data
+   if(gameON[cid] == True):
+        if sit1bool[cid]==False:
+            if data=='1A':
+               bot.send_message(cid,"'Al final te voy a bajar los humos de un porrazo.' -Se va como si nada hubiera pasado.")
+               boolAgresivo[cid]=True
+               sit1bool[cid]=True
+            elif data=='1B':
+               bot.send_message(cid,"'Y que no te vuelva a ver...' -Se va como si nada hubiera pasado.")
+               sit1bool[cid]=True
+               boolCauto[cid]=True
+               
+        if sit2bool[cid]==False:
+            if data=='2A':
+                sit2bool[cid]=True
+                boolFumeta[cid]=True
+            elif data=='2B':
+               #bot.send_message(cid,"'Bueno, pero me comes los cojones.' -Al final os casáis FIN")
+                sit2bool[cid]=True
+                boolFumeta[cid]=True
+            elif data == '2C':
+                sit2bool[cid]=True
+                boolNeutro[cid]=True
+            elif data == '2D':
+                sit2bool[cid]=True
+                boolSano[cid]=True
+               
+        if sit3bool[cid]==False:
+            if data=='3B':
+               boolNoPrueba[cid]=True
+               bot.send_message(cid,"Bien, decides no fumártelo…")
+               time.sleep(2)
+               bot.send_message(cid,"Por fin, te encuentras a alguien que conoces, es tu amigo Jorge, que estudia el proceso de como tragan las jirafas allí en veterinaria, siempre ha sido cuanto menos curioso el chaval.")
+               time.sleep(2)
+               bot.send_message(cid, "Te alegras de verle, y tras unas palabras, le echáis unas caladas al blunt.")
+               caladas[cid]=caladas[cid]+1
+               time.sleep(2)
+               bot.send_message(cid, '“Este porro no sube…”  decís.')
+               time.sleep(4)
+               bot.send_message(cid, "...")
+               time.sleep(2)
+               bot.send_message(cid, "De repente el cielo cambia de color y tu amigo Jorge empieza a hacer cosas raras. Se está transformando... ¡en una jirafa! O en algo parecido... Creo que estás fumao.\n\nSe ha añadido una calada al contador de caladas. Puedes acceder a él a través de la opción 'STATS 📖'")
+               sit3bool[cid]=True
+            elif data=='3A':
+               boolPrueba[cid]=True
+               caladas[cid]=caladas[cid]+1
+               bot.send_message(cid,"Es buena, te sube enseguida.")
+               time.sleep(2)
+               bot.send_message(cid, "Empiezas a ver todo de otro color...y te encuentras a alguien, es una especie de jirafa humanoide, da bastante miedo, pero para tu sorpresa es muy amigable.\n\nSe ha añadido una calada al contador de caladas. Puedes acceder a él a través de la opción 'STATS 📖'")
+               sit3bool[cid]=True
+
+               
+        if sit4bool[cid]==False:
+            if data=='4A':
+               bot.send_message(cid,"No, no se sabe, pero ahora *uab.cat* muestra un mensaje en japonés, muy enigmático.",parse_mode = "Markdown")
+               sit4bool[cid]=True
+            elif data=='4B':
+               bot.send_message(cid,"Sí, están como locos, ten cuidado")
+               time.sleep(1)
+               bot.send_message(cid, "***Le preguntas otra opción \na) ¿Se sabe quién ha sido?", reply_markup = sit5)
+               sit4bool[cid]=False
+            elif data=='4C':
+               bot.send_message(cid,"***Se ríe y te da algo de pienso. Asqueado, le preguntas otra de las opciones. \na) ¿Se sabe quién ha sido? \nb) ¿Por eso hay tanta seguridad?", reply_markup = sit6) 
+               sit4bool[cid]=False
+               
+               
+        if sit5bool[cid]==False:
+            if data=='5A':
+               bot.send_message(cid,"No, no se sabe, pero ahora *uab.cat* muestra un mensaje en japonés, muy enigmático.")
+               sit5bool[cid]=True
+               sit4bool[cid]=True
+               
+               
+        if sit6bool[cid]==False:
+            if data=='6A':
+               bot.send_message(cid,"No, no se sabe, pero ahora *uab.cat* muestra un mensaje en japonés, muy enigmático.",parse_mode = "Markdown")
+               sit6bool[cid]=True
+               sit4bool[cid]=True
+            elif data=='6B':
+               bot.send_message(cid,"Sí, están como locos, ten cuidado")
+               time.sleep(1)
+               bot.send_message(cid, "***Le preguntas otra opción \na) ¿Se sabe quién ha sido?", reply_markup = sit5)
+               sit6bool[cid]=True
+               
+        if sit7bool[cid]==False:
+            if data=='7A':
+                objeto[cid] = 1
+                bot.send_message(cid,"Te ha sido entregado el mapa del Eix Central de manos de Doraemon")
+                sit7bool[cid]=True
+            elif data=='7B':
+                objeto[cid] = 2
+                bot.send_message(cid,"Te ha sido entregado el lazo amarillo de manos de Doraemon")
+                sit7bool[cid]=True
+            elif data=='7C':
+                objeto[cid] = 3
+                bot.send_message(cid,"Te ha sido entregado el casco romano de manos de Doraemon")
+                sit7bool[cid]=True
+            elif data=='7D':
+                objeto[cid] = 4
+                bot.send_message(cid,"Te ha sido entregada la pokéball vacía de manos de Doraemon")
+                sit7bool[cid]=True
+                
+        if sit8bool[cid]==False:
+            if data=='8A':
+               #bot.send_message(cid,"'Te vienes detenido a la cárcel del condado, hijo de la grandísima puta.' -En la cárcel mueres FIN")
+               sit8bool[cid]=True
+            elif data=='8B':
+               #bot.send_message(cid,"'Bueno, pero me comes los cojones.' -Al final os casáis FIN")
+               sit8bool[cid]=True
+            
+            
+
+# OPCIONES DEL MENÚ DE JUEGO
+@bot.message_handler(func=lambda message: True, content_types=['text'])
+def command_text(m):
+    global gameON,caladas,asigRol,userStep,objeto
+    cid = m.chat.id
+    if (m.text == "Dar calada 🚬🍁" and gameON[cid]==True):
+        if asigRol[cid] == False:
+            caladas[cid]=caladas[cid]+1
+            bot.send_message(cid, '🚬🍁LE DAS UNA CALADA AL PORRO🍁🚬')
+        else:
+            bot.send_message(cid, 'Eh, eh, tómatelo con calma y espera hasta obtener tu rol.\n\nNo ha aumentado el contador de caladas.')
+    elif (m.text == "STATS 📖"):
+        list_Facultades=["0","1","2","Estás en la Facultad de Veterinaria, pero no estás muy seguro.","Facultad de Veterinaria.","Facultad de Traducción e Interpretación","Plaza Cívica","Facultad de Ciencias Sociales","Facultad de Ciencias","VITAE","Facultad de Ingeniería"]
+        bot.send_message(cid, "📖 STATS 📖\n\n-Ubicación: "+list_Facultades[get_user_step(cid)]+"\n-Llevas " + str(caladas[cid]) + ' caladas.'+"\n-Inventario: Porro"+list_objetos[objeto[cid]])
+    elif (m.text == "Forzar fin de partida ❌"):
+         userStep[cid] = 0
+         gameON[cid]=False
+         bot.send_message(cid,"Para resetear el bot, haz clic aquí: /start \n\nEsta acción NO se puede deshacer.")
+
+print ('UABlunt se está ejecutando utilizando esta máquina como servidor.')
+
+bot.polling(True, timeout = 1)
