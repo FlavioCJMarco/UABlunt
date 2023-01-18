@@ -3,7 +3,7 @@ import time
 import telepot
 from botocore.vendored import requests
 
-TELE_TOKEN='802101135:AAEjTDm69YM33QF8fft46QYzOcvE59zSn-o'
+TELE_TOKEN='REDACTED-o'
 URL = "https://api.telegram.org/bot{}/".format(TELE_TOKEN)
 
 menubuttons = [

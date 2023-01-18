@@ -1,1 +1,1 @@
-https://api.telegram.org/bot802101135:AAEjTDm69YM33QF8fft46QYzOcvE59zSn-o/setWebHook?url=https://dhh0bx31q1.execute-api.us-east-2.amazonaws.com/BETA
+https://api.telegram.org/botREDACTED:REDACTED-o/setWebHook?url=https://redacted.execute-api.us-east-2.amazonaws.com/BETA

@@ -5,7 +5,7 @@ import logging
 import time
 import os
 
-TOKEN = "802101135:AAEjTDm69YM33QF8fft46QYzOcvE59zSn-o" 
+TOKEN = "REDACTED-o" 
 
 userStep = {}
 knownUsers = []

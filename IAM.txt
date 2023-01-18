@@ -1,14 +1,14 @@
 Role ARN:
-arn:aws:iam::494313956841:role/ZappaFlaskRole
+arn:aws:iam::redacted:role/RedactedFlaskRole
 
 Bucket name:
-uablunt-zappa-bucket
+uablunt-redacted-bucket
 Región:
 US east (Ohio)
 us-east-2
 
-User: ZappaUser
-Access Key ID: AKIAXGF3IMXUUMGMZ3G5
-Secret Access Key: k1u2rgrKdNwbBJM7tBrw3ANcttwSaY4z2Jr0DZii
-https://494313956841.signin.aws.amazon.com/console
-User ARN: arn:aws:iam::494313956841:user/ZappaUser
+User: Redacted
+Access Key ID: REDACTED
+Secret Access Key: REDACTED
+https://redacted.signin.aws.amazon.com/console
+User ARN: arn:aws:iam::redacted:user/Redacted

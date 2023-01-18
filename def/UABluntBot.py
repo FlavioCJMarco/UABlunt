@@ -3,7 +3,7 @@ from telebot import types
 import logging
 import time
 
-TOKEN = "802101135:AAEjTDm69YM33QF8fft46QYzOcvE59zSn-o"
+TOKEN = "REDACTED-o"
 
 userStep = {}
 knownUsers = []

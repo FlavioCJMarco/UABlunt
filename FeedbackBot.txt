@@ -2,7 +2,7 @@ import json
 import time
 from botocore.vendored import requests
 
-TELE_TOKEN='802101135:AAEjTDm69YM33QF8fft46QYzOcvE59zSn-o'
+TELE_TOKEN='REDACTED' # BITBUCKET
 URL = "https://api.telegram.org/bot{}/".format(TELE_TOKEN)
 
 def send_message(text, chat_id):
@@ -41,4 +41,4 @@ def lambda_handler(event, context):
         'statusCode': 200
     }
 
-#ID CHAT ADMINISTRADOR: 156316529
+#ID CHAT ADMINISTRADOR: 1*6*1*5*9
